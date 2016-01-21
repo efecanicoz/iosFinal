@@ -9,7 +9,9 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
+    var newItem: remindCell = remindCell.init();
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -24,5 +26,8 @@ class ViewController: UIViewController {
         self.performSegueWithIdentifier("addPageSegue", sender: self)
     }
 
+    @IBAction func btnFind(sender: UIButton) {
+        //select a job from list depending on their priority
+    }
 }
 
