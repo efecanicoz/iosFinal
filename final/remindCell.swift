@@ -16,6 +16,7 @@ class remindCell
     var deadline: NSDate = NSDate.init();
     var desc:String = "";
     var priority:Int = 0;
+    var done: Bool = false;
     
     init ()
     {

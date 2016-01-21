@@ -60,6 +60,10 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="J2c-2J-9aD"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="DE0-mg-YnD"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -73,6 +77,9 @@
                             <constraint firstItem="qRR-MO-QIS" firstAttribute="top" secondItem="z2r-mo-Zbt" secondAttribute="bottom" id="anZ-dj-4It"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tableReminder" destination="qRR-MO-QIS" id="P1r-vy-Jii"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
