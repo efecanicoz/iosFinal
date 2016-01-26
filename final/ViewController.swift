@@ -8,14 +8,15 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIPopoverPresentationControllerDelegate {
     
     @IBOutlet weak var tableReminder: UITableView!
     var newItem: remindCell? = nil;
     
     var itemList: [remindCell] = [];
     
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view, typically from a nib.
@@ -23,11 +24,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.tableReminder.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
         //read entries from file
-        let fp = "list.txt";
+        let fp = "list3.txt";
         if let dir : NSString = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true).first
         {
             let path = dir.stringByAppendingPathComponent(fp);
-            let formatter = NSDateFormatter()
+            let formatter = NSDateFormatter();
+            formatter.dateFormat =  "yyyy-MM-dd HH:mm:ss xx";
+            formatter.timeZone = NSTimeZone(abbreviation: "UTC")
             do
             {
                 let fcontent = try NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding)
@@ -49,6 +52,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                         item.done = dic[6] == "true" ? true : false;
                         
                         itemList.append(item);
+                        
                     }
                 }
             }
@@ -57,17 +61,24 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 //empty list
             }
         }
+        
+        if(newItem != nil)
+        {
+            itemList.append(newItem!);
+            let notification = UILocalNotification()
+            notification.alertBody = "Todo Item \"\(newItem!.title)\" Is Overdue" // text that will be displayed in the notification
+            notification.alertAction = "open" // text that is displayed after "slide to..." on the lock screen - defaults to "slide to view"
+            notification.fireDate = newItem!.deadline // todo item due date (when notification will be fired)
+            notification.soundName = UILocalNotificationDefaultSoundName // play default sound
+            notification.userInfo = ["UUID": newItem!.title ] // assign a unique identifier to the notification so that we can retrieve it later
+            notification.category = "TODO_CATEGORY"
+            UIApplication.sharedApplication().scheduleLocalNotification(notification)
+        }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    @IBAction func btnAdd(sender: UIButton)
+    func saveFiles()
     {
-        //save items to file
-        let fp = "list.txt";
+        let fp = "list3.txt";
         var str : String = "";
         for cell in itemList
         {
@@ -84,7 +95,31 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
             catch {NSLog("Error while writing file")}
         }
-        
+
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+   
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)
+    {
+        if(segue.identifier == "showInfoSegue")
+        {
+            let svc = segue.destinationViewController as! showInfoView;
+            let index = tableReminder.indexPathForSelectedRow;
+            svc.toShow = itemList[(index?.row)!];
+        }
+    }
+    
+    
+    @IBAction func btnAdd(sender: UIButton)
+    {
+        //save items to file
+        saveFiles();
         //call segue
         self.performSegueWithIdentifier("addPageSegue", sender: self)
     }
@@ -102,10 +137,26 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     //filling table
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    {
         let cell:UITableViewCell = self.tableReminder.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
         
         cell.textLabel?.text = self.itemList[indexPath.row].title
+        cell.contentView.backgroundColor = UIColor.lightGrayColor();
+        
+        if(itemList[indexPath.row].priority == 0)
+        {
+            cell.textLabel?.textColor = UIColor.redColor();
+        }
+        else if(itemList[indexPath.row].priority == 1)
+        {
+            cell.textLabel?.textColor = UIColor.yellowColor();
+        }
+        else if(itemList[indexPath.row].priority == 2)
+        {
+            cell.textLabel?.textColor = UIColor.greenColor();
+        }
+
         
         return cell
     }
@@ -113,8 +164,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
     {
+        self.performSegueWithIdentifier("showInfoSegue", sender: self)
         return;
     }
     
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool
+    {
+        return true
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath)
+    {
+        if (editingStyle == UITableViewCellEditingStyle.Delete)
+        {
+            itemList.removeAtIndex(indexPath.row);
+            tableReminder.deleteRowsAtIndexPaths([indexPath],  withRowAnimation: UITableViewRowAnimation.Automatic);
+        }
+    }
 }
 

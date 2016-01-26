@@ -18,12 +18,15 @@ class AddViewController: UIViewController {
     @IBOutlet weak var prioritySegment: UISegmentedControl!
     
     let times = ["Off", "10 Min", "30 Min", "1 Hour", "2 Hours", "4 Hours", "6 Hours", "12 Hours", "1 Day"];
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         descriptionText.layer.borderWidth = 1;
         descriptionText.layer.borderColor = UIColor.blackColor().CGColor;
+        timePicker.selectRow(1, inComponent: 0, animated: true);
+        
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!)
@@ -101,6 +104,10 @@ class AddViewController: UIViewController {
         if(sender.on == false)
         {
             timePicker.selectRow(0, inComponent: 0, animated: true);
+        }
+        else
+        {
+            timePicker.selectRow(1, inComponent: 0, animated: true);
         }
     }
     

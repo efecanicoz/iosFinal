@@ -14,6 +14,7 @@
 		067069C11C47CCB8008ABE3C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 067069BF1C47CCB8008ABE3C /* LaunchScreen.storyboard */; };
 		067069CC1C47CCB8008ABE3C /* finalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067069CB1C47CCB8008ABE3C /* finalTests.swift */; };
 		067069D71C47CCB9008ABE3C /* finalUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067069D61C47CCB9008ABE3C /* finalUITests.swift */; };
+		F495520D1C57A6580021F7A0 /* showInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F495520C1C57A6580021F7A0 /* showInfoView.swift */; };
 		F4AB31C11C51016B00BDE703 /* remindCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AB31C01C51016B00BDE703 /* remindCell.swift */; };
 		F4B54AF71C4E8B4F005844B7 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B54AF61C4E8B4F005844B7 /* AddViewController.swift */; };
 /* End PBXBuildFile section */
@@ -49,6 +50,7 @@
 		067069D21C47CCB9008ABE3C /* finalUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = finalUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		067069D61C47CCB9008ABE3C /* finalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = finalUITests.swift; sourceTree = "<group>"; };
 		067069D81C47CCB9008ABE3C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F495520C1C57A6580021F7A0 /* showInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = showInfoView.swift; sourceTree = "<group>"; };
 		F4AB31C01C51016B00BDE703 /* remindCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = remindCell.swift; sourceTree = "<group>"; };
 		F4B54AF61C4E8B4F005844B7 /* AddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddViewController.swift; path = ../AddViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -105,6 +107,7 @@
 				067069B61C47CCB8008ABE3C /* AppDelegate.swift */,
 				067069B81C47CCB8008ABE3C /* ViewController.swift */,
 				067069BA1C47CCB8008ABE3C /* Main.storyboard */,
+				F495520C1C57A6580021F7A0 /* showInfoView.swift */,
 				F4AB31C01C51016B00BDE703 /* remindCell.swift */,
 				067069BD1C47CCB8008ABE3C /* Assets.xcassets */,
 				067069BF1C47CCB8008ABE3C /* LaunchScreen.storyboard */,
@@ -264,6 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				067069B91C47CCB8008ABE3C /* ViewController.swift in Sources */,
+				F495520D1C57A6580021F7A0 /* showInfoView.swift in Sources */,
 				067069B71C47CCB8008ABE3C /* AppDelegate.swift in Sources */,
 				F4AB31C11C51016B00BDE703 /* remindCell.swift in Sources */,
 				F4B54AF71C4E8B4F005844B7 /* AddViewController.swift in Sources */,

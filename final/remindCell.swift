@@ -18,8 +18,22 @@ class remindCell
     var priority:Int = 0;
     var done: Bool = false;
     
-    init ()
+    init(deadline: NSDate, title: String, reminder: Bool, remindTime:NSDate, desc:String, priority:Int, done: Bool ) {
+        self.deadline = deadline
+        self.title = title
+        self.reminder = reminder
+        self.remindTime = remindTime
+        self.desc = desc
+        self.priority = priority
+        self.done = done
+    }
+    
+    init()
     {
-        //Do nothing
+        //do nothing
+    }
+    
+    var isOverdue: Bool {
+        return (NSDate().compare(self.deadline) == NSComparisonResult.OrderedDescending) // deadline is earlier than current date
     }
 }
