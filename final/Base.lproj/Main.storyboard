@@ -20,8 +20,9 @@
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z2r-mo-Zbt">
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <items>
-                                    <navigationItem title="Naber" id="HO9-N7-3CM">
+                                    <navigationItem title="Reminder" id="HO9-N7-3CM">
                                         <barButtonItem key="leftBarButtonItem" style="plain" id="Zj2-pv-sip">
                                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="i5v-33-WJF">
                                                 <rect key="frame" x="20" y="7" width="73" height="30"/>
@@ -67,7 +68,7 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="qRR-MO-QIS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="2Nt-Vd-ubJ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="z2r-mo-Zbt" secondAttribute="trailing" constant="-20" id="8tc-QZ-qVR"/>
