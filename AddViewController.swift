@@ -8,8 +8,9 @@
 
 import UIKit
 
-class AddViewController: UIViewController {
-    
+class AddViewController: UIViewController
+{
+    var coming:remindCell? = nil;
     @IBOutlet weak var remindSwitch: UISwitch!
     @IBOutlet weak var titleText: UITextField!
     @IBOutlet weak var timePicker: UIPickerView!
@@ -26,7 +27,16 @@ class AddViewController: UIViewController {
         descriptionText.layer.borderWidth = 1;
         descriptionText.layer.borderColor = UIColor.blackColor().CGColor;
         timePicker.selectRow(1, inComponent: 0, animated: true);
-        
+        if(coming != nil)
+        {
+            remindSwitch.on = (coming?.reminder)!;
+            titleText.text = coming?.title;
+            descriptionText.text = coming?.desc;
+            prioritySegment.selectedSegmentIndex = (coming?.priority)!;
+            deadlinePicker.setDate((coming?.deadline)!, animated: true);
+            timePicker.selectRow((coming?.remindIndex)!, inComponent: 0, animated: true);
+            
+        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!)
@@ -40,43 +50,52 @@ class AddViewController: UIViewController {
             newEntry.deadline = deadlinePicker.date;
             newEntry.desc = descriptionText.text;
             newEntry.priority = prioritySegment.selectedSegmentIndex;
-            
+            newEntry.remindIndex = timePicker.selectedRowInComponent(0);
             //calculation of reminder
             let selected = timePicker.selectedRowInComponent(0);
             if(selected == 1)//1 min
             {
-                newEntry.remindTime = newEntry.deadline.dateByAddingTimeInterval(10*60);
+                newEntry.remindTime = newEntry.deadline.dateByAddingTimeInterval(-10*60);
             }
             else if(selected == 2)//30 min
             {
-                newEntry.remindTime = newEntry.deadline.dateByAddingTimeInterval(30*60);
+                newEntry.remindTime = newEntry.deadline.dateByAddingTimeInterval(-30*60);
             }
             else if(selected == 3)//1 hour
             {
-                newEntry.remindTime = newEntry.deadline.dateByAddingTimeInterval(60*60);
+                newEntry.remindTime = newEntry.deadline.dateByAddingTimeInterval(-60*60);
             }
             else if(selected == 4)//2 hours
             {
-                newEntry.remindTime = newEntry.deadline.dateByAddingTimeInterval(2*60*60);
+                newEntry.remindTime = newEntry.deadline.dateByAddingTimeInterval(-2*60*60);
             }
             else if(selected == 5)//4 hours
             {
-                newEntry.remindTime = newEntry.deadline.dateByAddingTimeInterval(4*60*60);
+                newEntry.remindTime = newEntry.deadline.dateByAddingTimeInterval(-4*60*60);
             }
             else if(selected == 6)//6 hours
             {
-                newEntry.remindTime = newEntry.deadline.dateByAddingTimeInterval(6*60*60);
+                newEntry.remindTime = newEntry.deadline.dateByAddingTimeInterval(-6*60*60);
             }
             else if(selected == 7)//12 hours
             {
-                newEntry.remindTime = newEntry.deadline.dateByAddingTimeInterval(12*60*60);
+                newEntry.remindTime = newEntry.deadline.dateByAddingTimeInterval(-12*60*60);
             }
             else if(selected == 8)//1 day
             {
-                newEntry.remindTime = newEntry.deadline.dateByAddingTimeInterval(24*60*60);
+                newEntry.remindTime = newEntry.deadline.dateByAddingTimeInterval(-24*60*60);
             }
             
             svc.newItem = newEntry;
+        }
+        if(segue.identifier == "cancelSegue")
+        {
+            if(coming != nil)
+            {
+                let svc = segue.destinationViewController as! ViewController;
+                svc.newItem = coming;
+            }
+            
         }
         //send this element
     }

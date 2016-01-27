@@ -17,6 +17,7 @@ class remindCell
     var desc:String = "";
     var priority:Int = 0;
     var done: Bool = false;
+    var remindIndex = 0;
     
     init(deadline: NSDate, title: String, reminder: Bool, remindTime:NSDate, desc:String, priority:Int, done: Bool ) {
         self.deadline = deadline

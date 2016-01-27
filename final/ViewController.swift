@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIPopoverPresentationControllerDelegate {
     
     @IBOutlet weak var tableReminder: UITableView!
+    var toSendIndex = 0;
     var newItem: remindCell? = nil;
     
     var itemList: [remindCell] = [];
@@ -24,7 +25,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.tableReminder.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
         //read entries from file
-        let fp = "list3.txt";
+        let fp = "list5.txt";
         if let dir : NSString = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true).first
         {
             let path = dir.stringByAppendingPathComponent(fp);
@@ -50,6 +51,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                         item.desc = dic[4];
                         item.priority = Int(dic[5])!
                         item.done = dic[6] == "true" ? true : false;
+                        item.remindIndex = Int(dic[7])!;
                         
                         itemList.append(item);
                         
@@ -65,26 +67,29 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if(newItem != nil)
         {
             itemList.append(newItem!);
+            saveFiles();
             let notification = UILocalNotification()
-            notification.alertBody = "Todo Item \"\(newItem!.title)\" Is Overdue" // text that will be displayed in the notification
+            notification.alertBody = "Reminding:\"\(newItem!.title)\" \n\(newItem!.desc)" // text that will be displayed in the notification
             notification.alertAction = "open" // text that is displayed after "slide to..." on the lock screen - defaults to "slide to view"
-            notification.fireDate = newItem!.deadline // todo item due date (when notification will be fired)
+            notification.fireDate = newItem!.remindTime // todo item due date (when notification will be fired)
             notification.soundName = UILocalNotificationDefaultSoundName // play default sound
             notification.userInfo = ["UUID": newItem!.title ] // assign a unique identifier to the notification so that we can retrieve it later
             notification.category = "TODO_CATEGORY"
             UIApplication.sharedApplication().scheduleLocalNotification(notification)
+            self.navigationController?.popToRootViewControllerAnimated(true)
+            
         }
     }
 
     func saveFiles()
     {
-        let fp = "list3.txt";
+        let fp = "list5.txt";
         var str : String = "";
         for cell in itemList
         {
             str += cell.title + "," + cell.reminder.description + "," + cell.deadline.description;
             str += "," + cell.remindTime.description + "," + cell.desc;
-            str += "," + cell.priority.description + "," + cell.done.description + ";";
+            str += "," + cell.priority.description + "," + cell.done.description + "," + cell.remindIndex.description + ";";
         }
         if let dir : NSString = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true).first {
             let path = dir.stringByAppendingPathComponent(fp);
@@ -113,13 +118,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             let index = tableReminder.indexPathForSelectedRow;
             svc.toShow = itemList[(index?.row)!];
         }
+        else if(segue.identifier == "editPageSegue")
+        {
+            let svc = segue.destinationViewController as! AddViewController;
+            svc.coming = itemList[toSendIndex];
+            itemList.removeAtIndex(toSendIndex);
+        }
     }
     
     
     @IBAction func btnAdd(sender: UIButton)
     {
         //save items to file
-        saveFiles();
+        //saveFiles();
         //call segue
         self.performSegueWithIdentifier("addPageSegue", sender: self)
     }
@@ -173,13 +184,38 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return true
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath)
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]?
+    {
+        
+        let editAction = UITableViewRowAction(style: .Normal, title: "Edit") { (action, indexPath) in
+            tableView.editing = false
+            
+            self.toSendIndex = indexPath.row;
+            self.performSegueWithIdentifier("editPageSegue", sender: self)
+            // your action
+        }
+        
+        editAction.backgroundColor = UIColor.grayColor()
+        
+        
+        let deleteAction = UITableViewRowAction(style: .Default, title: "Delete") { (action, indexPath) in
+            tableView.editing = false
+            // your delete action
+            self.toSendIndex = indexPath.row;
+            self.itemList.removeAtIndex(indexPath.row);
+            self.tableReminder.deleteRowsAtIndexPaths([indexPath],  withRowAnimation: UITableViewRowAnimation.Automatic);
+        }
+        
+        return [deleteAction, editAction]
+    }
+    
+    /*func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath)
     {
         if (editingStyle == UITableViewCellEditingStyle.Delete)
         {
             itemList.removeAtIndex(indexPath.row);
             tableReminder.deleteRowsAtIndexPaths([indexPath],  withRowAnimation: UITableViewRowAnimation.Automatic);
         }
-    }
+    }*/
 }
 

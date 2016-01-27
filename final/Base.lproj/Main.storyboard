@@ -81,6 +81,7 @@
                     <connections>
                         <outlet property="tableReminder" destination="qRR-MO-QIS" id="P1r-vy-Jii"/>
                         <segue destination="L27-bo-lcT" kind="show" identifier="showInfoSegue" id="A21-tl-G7b"/>
+                        <segue destination="F8A-Tu-zY2" kind="show" identifier="editPageSegue" id="GOy-X9-CfA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -278,5 +279,6 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="DyS-iN-mfu"/>
+        <segue reference="GOy-X9-CfA"/>
     </inferredMetricsTieBreakers>
 </document>
