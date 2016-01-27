@@ -11,6 +11,8 @@ import UIKit
 class AddViewController: UIViewController
 {
     var coming:remindCell? = nil;
+    var comingIndex: Int = 0;
+    
     @IBOutlet weak var remindSwitch: UISwitch!
     @IBOutlet weak var titleText: UITextField!
     @IBOutlet weak var timePicker: UIPickerView!
@@ -87,13 +89,23 @@ class AddViewController: UIViewController
             }
             
             svc.newItem = newEntry;
+            
+            if(coming != nil)
+            {
+                svc.returnVal = comingIndex;
+            }
+            else
+            {
+                svc.returnVal = -1;
+            }
         }
         if(segue.identifier == "cancelSegue")
         {
             if(coming != nil)
             {
                 let svc = segue.destinationViewController as! ViewController;
-                svc.newItem = coming;
+                svc.newItem = nil;
+                svc.returnVal = -1;
             }
             
         }

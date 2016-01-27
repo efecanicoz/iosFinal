@@ -13,7 +13,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var tableReminder: UITableView!
     var toSendIndex = 0;
     var newItem: remindCell? = nil;
-    
+    var returnVal: Int = 0;
     var itemList: [remindCell] = [];
     
     override func viewDidLoad()
@@ -66,6 +66,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         if(newItem != nil)
         {
+            if(returnVal != -1)
+            {
+                itemList.removeAtIndex(returnVal);
+            }
             itemList.append(newItem!);
             saveFiles();
             let notification = UILocalNotification()
@@ -117,12 +121,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             let svc = segue.destinationViewController as! showInfoView;
             let index = tableReminder.indexPathForSelectedRow;
             svc.toShow = itemList[(index?.row)!];
+            
         }
         else if(segue.identifier == "editPageSegue")
         {
             let svc = segue.destinationViewController as! AddViewController;
             svc.coming = itemList[toSendIndex];
-            itemList.removeAtIndex(toSendIndex);
+            svc.comingIndex = toSendIndex;
         }
     }
     
@@ -204,8 +209,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.toSendIndex = indexPath.row;
             self.itemList.removeAtIndex(indexPath.row);
             self.tableReminder.deleteRowsAtIndexPaths([indexPath],  withRowAnimation: UITableViewRowAnimation.Automatic);
+            self.saveFiles();
         }
-        
         return [deleteAction, editAction]
     }
     

@@ -10,12 +10,26 @@ import UIKit
 
 class showInfoView: UIViewController
 {
+    
+    @IBOutlet weak var lblTitle: UILabel!
+    @IBOutlet weak var lblRemind: UILabel!
+    @IBOutlet weak var lblDue: UILabel!
+    @IBOutlet weak var viewDescription: UITextView!
+    @IBOutlet weak var lblPriority: UILabel!
+    
     var toShow: remindCell = remindCell.init();
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        
+        let formatter = NSDateFormatter();
+        formatter.dateFormat =  "yyyy-MM-dd HH:mm:ss xx";
+        lblTitle.text = lblTitle.text! + toShow.title;
+        lblRemind.text = lblRemind.text! + formatter.stringFromDate(toShow.remindTime);
+        lblDue.text = lblDue.text! + formatter.stringFromDate(toShow.deadline);
+        lblPriority.text = lblPriority.text! + (toShow.priority == 0 ? "High" : (toShow.priority == 1 ? "Mid" : "Low"));
+        viewDescription.text = viewDescription.text + toShow.desc;
     }
 
     override func didReceiveMemoryWarning() {
