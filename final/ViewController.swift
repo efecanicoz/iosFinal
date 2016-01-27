@@ -119,8 +119,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if(segue.identifier == "showInfoSegue")
         {
             let svc = segue.destinationViewController as! showInfoView;
-            let index = tableReminder.indexPathForSelectedRow;
-            svc.toShow = itemList[(index?.row)!];
+            svc.toShow = itemList[toSendIndex];
             
         }
         else if(segue.identifier == "editPageSegue")
@@ -140,8 +139,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.performSegueWithIdentifier("addPageSegue", sender: self)
     }
 
-    @IBAction func btnFind(sender: UIButton) {
-        //select a job from list depending on their priority
+    @IBAction func btnFind(sender: UIButton)
+    {
+        var temp: Int = 0;
+        while(true)
+        {
+            temp = random() % itemList.count;
+            if(itemList[temp].done != true)
+            {
+                break
+            }
+        }
+        toSendIndex = temp;
+        self.performSegueWithIdentifier("showInfoSegue", sender: self)
     }
     
     //tableview related
@@ -172,6 +182,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         {
             cell.textLabel?.textColor = UIColor.greenColor();
         }
+        else if(itemList[indexPath.row].priority == 3)
+        {
+            cell.textLabel?.textColor = UIColor.grayColor();
+        }
 
         
         return cell
@@ -180,6 +194,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
     {
+        toSendIndex = (tableReminder.indexPathForSelectedRow?.row)!;
         self.performSegueWithIdentifier("showInfoSegue", sender: self)
         return;
     }
@@ -197,7 +212,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
             self.toSendIndex = indexPath.row;
             self.performSegueWithIdentifier("editPageSegue", sender: self)
-            // your action
         }
         
         editAction.backgroundColor = UIColor.grayColor()
@@ -205,22 +219,29 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         let deleteAction = UITableViewRowAction(style: .Default, title: "Delete") { (action, indexPath) in
             tableView.editing = false
-            // your delete action
+            // delete action
             self.toSendIndex = indexPath.row;
             self.itemList.removeAtIndex(indexPath.row);
             self.tableReminder.deleteRowsAtIndexPaths([indexPath],  withRowAnimation: UITableViewRowAnimation.Automatic);
             self.saveFiles();
         }
-        return [deleteAction, editAction]
+        
+        let doneAction = UITableViewRowAction(style: .Normal , title: "Done") { (action, indexPath) in
+            tableView.editing = false
+            self.itemList[indexPath.row].done = true;
+            self.itemList[indexPath.row].priority = 3;
+            self.tableReminder.reloadData();
+            self.saveFiles();
+        }
+        
+        return [deleteAction, editAction, doneAction]
     }
     
-    /*func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath)
-    {
-        if (editingStyle == UITableViewCellEditingStyle.Delete)
-        {
-            itemList.removeAtIndex(indexPath.row);
-            tableReminder.deleteRowsAtIndexPaths([indexPath],  withRowAnimation: UITableViewRowAnimation.Automatic);
-        }
-    }*/
+    func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+        let movedObject = self.itemList[sourceIndexPath.row]
+        itemList.removeAtIndex(sourceIndexPath.row);
+        itemList.insert(movedObject, atIndex: destinationIndexPath.row);
+        self.tableReminder.reloadData();
+    }
 }
 
